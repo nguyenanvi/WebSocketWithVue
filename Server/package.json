@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "https": "^1.0.0",
+    "systeminformation": "^5.21.17",
+    "ws": "^8.14.2"
+  },
+  "scripts": {
+    "dev": "nodemon -x"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

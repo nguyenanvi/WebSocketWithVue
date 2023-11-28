@@ -1,10 +1,10 @@
 <template>
   <div class="wrapper">
-    <h1>WebSocket client</h1>
-    <form ref="connectForm"  v-if="conn.status">
+    <h1>Settings</h1>
+    <form v-if="conn.status">
       <div class="frm-grp">
         <label>
-          Server URL: {{ serverURL }}
+          Server domain: {{ serverURL }}
         </label>
       </div>
       <div class="frm-grp">
@@ -23,11 +23,15 @@
         </label>
       </div>
     </form>
-    <form ref="connectForm">
+    <form v-if="conn.status" >
       <div class="frm-grp">
-        <button v-if="conn.status" @click.prevent="emit('disconnect')">Disconnect</button>
-        <!-- <button v-else @click="window.location.reload()">Connect</button> -->
-        <button v-else @click.prevent="emit('connect')">Connect</button>
+        <label>
+          Your nickname:
+        </label>
+        <input type="text" ref="nickName" @input="verifyNickName"/>
+      </div>
+      <div class="frm-grp">
+        <button :disabled="!isSubmittable" @click.prevent="emit('registerNickName',[nickName.value])">Register Name</button>
       </div>
     </form>
   </div>
@@ -36,10 +40,17 @@
 <script setup>
 import { ref, defineEmits, inject } from 'vue'
 
+const nickName = ref(null)
+const isSubmittable = ref(false)
+
 const conn = inject('connectionInfomation')
 const serverURL = inject('serverURL')
 
-const emit = defineEmits(['connect','disconnect', 'registerNickName']);
+const emit = defineEmits(['disconnect', 'registerNickName']);
+
+function verifyNickName($event){
+  isSubmittable.value = ($event.target.value!=="") && ($event.target.value !== conn.nickName)
+}
 
 </script>
 

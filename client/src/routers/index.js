@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 export const routes = [
   {
-    path: '',
+    path: '/',
     name: 'home',
     meta: {
       title: 'Home',
@@ -16,6 +16,14 @@ export const routes = [
       title: 'Chat view',
     },
     component: () => import('@/views/ChatView.vue')
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    meta: {
+      title: 'Settings',
+    },
+    component: () => import('@/views/SettingView.vue')
   },
   // {
   //   path: '/admin',

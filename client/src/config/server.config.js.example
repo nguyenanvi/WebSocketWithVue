@@ -1,0 +1,2 @@
+export const serverURL = "ws://127.0.0.1:8080"
+export const aliveTime = 5000 // Pinging alive time 5s

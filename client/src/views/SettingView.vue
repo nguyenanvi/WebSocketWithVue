@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <h1>Settings</h1>
-    <form v-if="conn.status">
+    <form v-if="connectionInfomation.status">
       <div class="frm-grp">
         <label>
           Server domain: {{ serverURL }}
@@ -9,26 +9,32 @@
       </div>
       <div class="frm-grp">
         <label>
-          Current nickName: <strong>{{ conn.nickName }}</strong>
+          Current nickName: <strong>{{ connectionInfomation.nickName }}</strong>
         </label>
       </div>
       <div class="frm-grp">
         <label>
-          Current ip: <strong>{{ conn.ipaddress }}</strong>
+          Current ip: <strong>{{ connectionInfomation.ipaddress }}</strong>
         </label>
       </div>
       <div class="frm-grp">
         <label>
-          Online clients: <strong>{{ conn.onlineClientsCount }}</strong>
+          Online clients: <strong>{{ connectionInfomation.onlineClientsCount }}</strong>
         </label>
       </div>
     </form>
-    <form v-if="conn.status" >
+    <form v-if="connectionInfomation.status" >
       <div class="frm-grp">
         <label>
           Your nickname:
         </label>
         <input type="text" ref="nickName" @input="verifyNickName"/>
+      </div>
+      <div class="frm-grp">
+        <label>
+          <input type="checkbox" ref="rememberNickNameCheckBox" @change="rememberNickName"/>
+          Remember my nickName
+        </label>
       </div>
       <div class="frm-grp">
         <button :disabled="!isSubmittable" @click.prevent="emit('registerNickName',[nickName.value])">Register Name</button>
@@ -38,19 +44,34 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, inject } from 'vue'
+import { ref, defineEmits, inject, onMounted } from 'vue'
 
 const nickName = ref(null)
 const isSubmittable = ref(false)
 
-const conn = inject('connectionInfomation')
+const connectionInfomation = inject('connectionInfomation')
 const serverURL = inject('serverURL')
 
 const emit = defineEmits(['disconnect', 'registerNickName']);
 
 function verifyNickName($event){
-  isSubmittable.value = ($event.target.value!=="") && ($event.target.value !== conn.nickName)
+  isSubmittable.value = ($event.target.value!=="") && ($event.target.value !== connectionInfomation.nickName)
 }
+function rememberNickName($event){
+  if ($event.target.checked) {
+    localStorage.setItem('rememberNickName',true)
+    localStorage.setItem('nickName', connectionInfomation.value.nickName)
+  } else {
+    localStorage.removeItem('rememberNickName')
+    localStorage.removeItem('nickName')
+  }
+}
+
+const rememberNickNameCheckBox = ref(null)
+onMounted(()=>{
+  rememberNickNameCheckBox.value.checked = localStorage.getItem('rememberNickName')
+})
+
 
 </script>
 

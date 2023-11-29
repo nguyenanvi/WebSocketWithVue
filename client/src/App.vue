@@ -27,6 +27,10 @@ let wsc = new WebSocket(serverURL) // wsc means WebSocketClient!
 
 wsc.onopen = (event) => {
   connectionInfomation.value.status = true
+  if(localStorage.getItem('rememberNickName')){
+    // console.log(localStorage.getItem('nickName'));
+    registerNickName(localStorage.getItem('nickName'));
+  }
   checkAliveInterval.value = setInterval(() => {
     if (wsc.readyState === 1) {
       // wsc.send('ping');
@@ -99,6 +103,9 @@ if (performance.navigation.type == 1) {
 function registerNickName (name){
   try {
     wsc.send('/set nickname '+encodeURIComponent(name))
+    if(localStorage.getItem('rememberNickName')){
+      localStorage.setItem('nickName', name)
+    }
   } catch (error) {
     throw(error)  
   }
